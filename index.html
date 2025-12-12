@@ -13,7 +13,7 @@ body {
     display: flex;
     flex-direction: column;
     align-items: center;
-    gap: 20px;
+    gap: 5px;
     user-select: none;
     min-height: 100vh;
 }
@@ -24,6 +24,20 @@ h2 {
     color: #344055;
     text-align: center;
 }
+
+/* Счетчик раундов - статичный */
+.round-counter {
+    background: #5366d9;
+    color: white;
+    padding: 8px 20px;
+    border-radius: 20px;
+    font-weight: 600;
+    font-size: 16px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+    margin-bottom: 10px;
+    width: fit-content;
+}
+
 #jsonLoader {
     width: 100%;
     max-width: 380px;
@@ -106,10 +120,10 @@ h2 {
     display: flex;
     align-items: center;
     justify-content: center;
-    font-size: 16px;
+    font-size: 14px;
     font-weight: 600;
     letter-spacing: 1px;
-    border-radius: 16px 0 0 16px;
+    /* border-radius: 16px 0 0 0px; */
     text-transform: uppercase;
     box-shadow: 2px 0 8px rgba(83, 102, 217, 0.2);
 }
@@ -161,25 +175,12 @@ button:disabled {
 
 /* Индикатор загрузки */
 .status {
+    /* display: none; */
     font-size: 14px;
     color: #666;
     text-align: center;
-    margin-top: -10px;
-}
-
-/* Счетчик раундов */
-.round-counter {
-    position: fixed;
-    top: 20px;
-    right: 20px;
-    background: #5366d9;
-    color: white;
-    padding: 8px 16px;
-    border-radius: 20px;
-    font-weight: 600;
-    font-size: 14px;
-    box-shadow: 0 4px 12px rgba(0,0,0,0.1);
-    z-index: 100;
+    margin-top: -5px;
+    margin-bottom: 5px;
 }
 
 /* Индикатор пустой карточки */
@@ -201,10 +202,10 @@ button:disabled {
 <body>
 
 <h2>Карточная игра</h2>
+<div class="round-counter" id="roundCounter">Раунд: 1</div>
+
 <input type="file" id="jsonLoader" accept=".json" title="Загрузите JSON-файл с данными для игры">
 <div class="status" id="status">Загрузите JSON-файл, чтобы начать игру</div>
-
-<div class="round-counter" id="roundCounter">Раунд: 1</div>
 
 <div class="cards">
     <div class="card" data-type="who">
