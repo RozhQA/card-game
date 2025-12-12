@@ -175,7 +175,7 @@ button:disabled {
 
 /* Индикатор загрузки */
 .status {
-    /* display: none; */
+    display: none;
     font-size: 14px;
     color: #666;
     text-align: center;
@@ -202,11 +202,11 @@ button:disabled {
 <body>
 
 <h2>Карточная игра</h2>
-<div class="round-counter" id="roundCounter">Раунд: 1</div>
 
-<input type="file" id="jsonLoader" accept=".json" title="Загрузите JSON-файл с данными для игры">
 <div class="status" id="status">Загрузите JSON-файл, чтобы начать игру</div>
+<input type="file" id="jsonLoader" accept=".json" title="Загрузите JSON-файл с данными для игры">
 
+<div class="round-counter" id="roundCounter">Раунд: 1</div>
 <div class="cards">
     <div class="card" data-type="who">
         <div class="inner">
