@@ -1,0 +1,22 @@
+{
+  "name": "Правда или Блеф",
+  "short_name": "Card Story",
+  "description": "Карточная игра на выдумывание историй",
+  "start_url": "./",
+  "display": "standalone",
+  "background_color": "#5366d9",
+  "theme_color": "#5366d9",
+  "orientation": "portrait",
+  "icons": [
+    {
+      "src": "apple-touch-icon.png",
+      "sizes": "180x180",
+      "type": "image/png"
+    },
+    {
+      "src": "apple-touch-icon-152x152.png",
+      "sizes": "152x152",
+      "type": "image/png"
+    }
+  ]
+}

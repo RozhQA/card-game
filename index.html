@@ -2,18 +2,33 @@
 <html lang="ru">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, viewport-fit=cover">
 <title>Игра «Правда или Блеф: История по Карточкам»</title>
 
-<!-- PWA мета-теги -->
+<!-- PWA мета-теги для iOS -->
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="apple-mobile-web-app-title" content="Правда или Блеф">
-<meta name="theme-color" content="#5366d9">
+<meta name="format-detection" content="telephone=no">
 <meta name="mobile-web-app-capable" content="yes">
-<link rel="manifest" href="data:application/json;base64,ewogICJuYW1lIjogItCa0YDQsNGB0L3QvtC5INC+0LHRgNCw0LHQvtGC0YfQuNC6IiwKICAic2hvcnRfbmFtZSI6ICLQn9GA0LDQstC00LAiLAogICJkZXNjcmlwdGlvbiI6ICLQp9C10YDQvdC+0LPQviDQv9C+0LvRjNC30L7QstCw0YLQtdC70Ywg0L/RgNC+0LTRg9C60YIiLAogICJzdGFydF91cmwiICIuLyIsCiAgImRpc3BsYXkiOiAic3RhbmRhbG9uZSIsCiAgImJhY2tncm91bmRfY29sb3IiOiAiIzUzNjZkOSIsCiAgInRoZW1lX2NvbG9yIjogIiM1MzY2ZDkiLAogICJpY29ucyI6IFsKICAgIHsKICAgICAgInNyYyI6ICJkYXRhOmltYWdlL3N2Zyt4bWw7YmFzZTY0LFBITjJaeUI0Yld4dWN6MGlhSFIwY0RvdkwzZDNkeTUzTXk1dmNtY3ZNakF3TUM5emRtY2lJSEJ5WlhObGNuWmxRWE53WldOMFVtRjBhVzg5SW5oTmFXNVpUV2x1SUcxbFpYUWlJSFpwWlhkQ2IzZzlJakFnTUNBek1UQWdNelV3SWo0OGNtVmpkQ0IzYVdSMGFEMGlNVEF3SlNJZ2FHVnBaMmgwUFNJek1EQWlJR1pwYkd3OUltNXZibVVpSUhacFpYZFRkSEpwYm1jOUltVnVaWFFpSUhacFpYZGpiMjF0YjI1cGVtOXVkR0ZzYVdWdWREMGlkSEpoYm5Oc1lYUmxLREV1TVM0eE1pSS8iLAogICAgICAic2l6ZXMiOiAiMTkyeDE5MiIsCiAgICAgICJ0eXBlIjogImltYWdlL3BuZyIsCiAgICAgICJwdXJwb3NlIjogImFueSBtYXNrYWJsZSIKICAgIH0KICBdCn0=">
-<link rel="apple-touch-icon" href="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAxOTIgMTkyIiBmaWxsPSIjZmZmZmZmIj48cGF0aCBkPSJNMTYwIDY0SDEyOHYzMmgzMmM4LjggMCAxNi03LjIgMTYtMTZzLTcuMi0xNi0xNi0xNnptMCA5NkgxMjh2MzJoMzJjOC44IDAgMTYtNy4yIDE2LTE2cy03LjItMTYtMTYtMTZ6TTk2IDE2MGgtMzJ2MzJoMzJjOC44IDAgMTYtNy4yIDE2LTE2cy03LjItMTYtMTYtMTZ6bTAtOTZoLTMydjMyaDMyYzguOCAwIDE2LTcuMiAxNi0xNnMtNy4yLTE2LTE2LTE2em0wLTY0Yy0yNi41IDAtNDggMjEuNS00OCA0OHMyMS41IDQ4IDQ4IDQ4IDQ4LTIxLjUgNDgtNDgtMjEuNS00OC00OC00OHpNNjQgMTYwSDMyYy04LjggMC0xNiA3LjItMTYgMTZzNy4yIDE2IDE2IDE2aDMydi0zMnpNNjQgOTZIMzJjLTguOCAwLTE2IDcuMi0xNiAxNnM3LjIgMTYgMTYgMTZoMzJ2LTMyek05NiAwYy04LjggMC0xNiA3LjItMTYgMTZ2MzJoMzJjMjYuNSAwIDQ4LTIxLjUgNDgtNDhTMTIyLjUgMCA5NiAwek0xMjggMzJoMzJjOC44IDAgMTYtNy4yIDE2LTE2cy03LjItMTYtMTYtMTZoLTMydjMyeiIvPjwvc3ZnPg==">
-<link rel="icon" type="image/svg+xml" href="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAxOTIgMTkyIiBmaWxsPSIjNTM2NmQ5Ij48cGF0aCBkPSJNMTYwIDY0SDEyOHYzMmgzMmM4LjggMCAxNi03LjIgMTYtMTZzLTcuMi0xNi0xNi0xNnptMCA5NkgxMjh2MzJoMzJjOC44IDAgMTYtNy4yIDE2LTE2cy03LjItMTYtMTYtMTZ6TTk2IDE2MGgtMzJ2MzJoMzJjOC44IDAgMTYtNy4yIDE2LTE2cy03LjItMTYtMTYtMTZ6bTAtOTZoLTMydjMyaDMyYzguOCAwIDE2LTcuMiAxNi0xNnMtNy4yLTE2LTE2LTE2em0wLTY0Yy0yNi41IDAtNDggMjEuNS00OCA0OHMyMS41IDQ4IDQ4IDQ4IDQ4LTIxLjUgNDgtNDgtMjEuNS00OC00OC00OHpNNjQgMTYwSDMyYy04LjggMC0xNiA3LjItMTYgMTZzNy4yIDE2IDE2IDE2aDMydi0zMnpNNjQgOTZIMzJjLTguOCAwLTE2IDcuMi0xNiAxNnM3LjIgMTYgMTYgMTZoMzJ2LTMyek05NiAwYy04LjggMC0xNiA3LjItMTYgMTZ2MzJoMzJjMjYuNSAwIDQ4LTIxLjUgNDgtNDhTMTIyLjUgMCA5NiAwek0xMjggMzJoMzJjOC44IDAgMTYtNy4yIDE2LTE2cy03LjItMTYtMTYtMTZoLTMydjMyeiIvPjwvc3ZnPg==">
+<meta name="theme-color" content="#5366d9">
+
+<!-- Иконки для iOS (файлы должны быть в той же папке) -->
+<link rel="apple-touch-icon" href="apple-touch-icon.png">
+<link rel="apple-touch-icon" sizes="152x152" href="apple-touch-icon-152x152.png">
+<link rel="apple-touch-icon" sizes="180x180" href="apple-touch-icon-180x180.png">
+<link rel="apple-touch-icon" sizes="167x167" href="apple-touch-icon-167x167.png">
+
+<!-- Splash screen для iOS (рекомендуемые размеры) -->
+<link rel="apple-touch-startup-image" href="apple-launch-1242x2688.png" media="(device-width: 414px) and (device-height: 896px) and (-webkit-device-pixel-ratio: 3)">
+<link rel="apple-touch-startup-image" href="apple-launch-1125x2436.png" media="(device-width: 375px) and (device-height: 812px) and (-webkit-device-pixel-ratio: 3)">
+<link rel="apple-touch-startup-image" href="apple-launch-828x1792.png" media="(device-width: 414px) and (device-height: 896px) and (-webkit-device-pixel-ratio: 2)">
+
+<!-- Manifest для PWA -->
+<link rel="manifest" href="manifest.json">
+
+<!-- Favicon -->
+<link rel="icon" type="image/png" href="favicon-32x32.png">
 
 <style>
 body {
@@ -28,7 +43,38 @@ body {
     user-select: none;
     min-height: 100vh;
     -webkit-tap-highlight-color: transparent;
+    padding-top: constant(safe-area-inset-top);
+    padding-top: env(safe-area-inset-top);
+    padding-bottom: constant(safe-area-inset-bottom);
+    padding-bottom: env(safe-area-inset-bottom);
 }
+
+/* Фулскрин для PWA iOS */
+@supports (-webkit-touch-callout: none) {
+    body {
+        padding: 0;
+        padding-top: env(safe-area-inset-top);
+        padding-bottom: env(safe-area-inset-bottom);
+        background: #e9ecf3;
+    }
+    
+    .container {
+        max-width: 100%;
+        padding: 20px;
+        padding-top: calc(20px + env(safe-area-inset-top));
+        padding-bottom: calc(20px + env(safe-area-inset-bottom));
+    }
+}
+
+.container {
+    width: 100%;
+    max-width: 380px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 5px;
+}
+
 h2 {
     margin: 0;
     margin-bottom: 5px;
@@ -210,11 +256,9 @@ button:disabled {
 }
 
 /* Стили для PWA режима */
-@media all and (display-mode: standalone) {
-    body {
-        padding-top: env(safe-area-inset-top);
-        padding-bottom: env(safe-area-inset-bottom);
-    }
+.standalone body {
+    padding-top: env(safe-area-inset-top);
+    padding-bottom: env(safe-area-inset-bottom);
 }
 
 /* Улучшения для touch устройств */
@@ -228,62 +272,76 @@ button:disabled {
         cursor: default;
     }
 }
+
+/* Предотвращение зума на iOS */
+input, select, textarea {
+    font-size: 16px !important;
+}
+
+/* Скрываем стандартные элементы браузера в PWA */
+@media (display-mode: standalone) {
+    body {
+        overscroll-behavior: none;
+    }
+}
 </style>
 </head>
 <body>
 
-<h2>Игра «Правда или Блеф: История по Карточкам»</h2>
+<div class="container">
+    <h2>Тру стори, Bob!»</h2>
 
-<div class="status" id="status">Загрузите JSON-файл, чтобы начать игру</div>
-<input type="file" id="jsonLoader" accept=".json" title="Загрузите JSON-файл с данными для игры">
+    <div class="status" id="status">Загрузите JSON-файл, чтобы начать игру</div>
+    <input type="file" id="jsonLoader" accept=".json" title="Загрузите JSON-файл с данными для игры">
 
-<div class="round-counter" id="roundCounter">Раунд: 1</div>
-<div class="cards">
-    <div class="card" data-type="who">
-        <div class="inner">
-            <div class="front" id="front-who">
-                <div class="card-title">Кто я?</div>
-                <div class="card-content" id="content-who"></div>
-                <div class="empty-card-indicator"></div>
+    <div class="round-counter" id="roundCounter">Раунд: 1</div>
+    <div class="cards">
+        <div class="card" data-type="who">
+            <div class="inner">
+                <div class="front" id="front-who">
+                    <div class="card-title">Кто я?</div>
+                    <div class="card-content" id="content-who"></div>
+                    <div class="empty-card-indicator"></div>
+                </div>
+                <div class="back">Кто я?</div>
             </div>
-            <div class="back">Кто я?</div>
+        </div>
+        <div class="card" data-type="where">
+            <div class="inner">
+                <div class="front" id="front-where">
+                    <div class="card-title">Где я?</div>
+                    <div class="card-content" id="content-where"></div>
+                    <div class="empty-card-indicator"></div>
+                </div>
+                <div class="back">Где я?</div>
+            </div>
+        </div>
+        <div class="card" data-type="meet">
+            <div class="inner">
+                <div class="front" id="front-meet">
+                    <div class="card-title">Кого встретил?</div>
+                    <div class="card-content" id="content-meet"></div>
+                    <div class="empty-card-indicator"></div>
+                </div>
+                <div class="back">Кого встретил?</div>
+            </div>
+        </div>
+        <div class="card" data-type="action">
+            <div class="inner">
+                <div class="front" id="front-action">
+                    <div class="card-title">Что делали?</div>
+                    <div class="card-content" id="content-action"></div>
+                    <div class="empty-card-indicator"></div>
+                </div>
+                <div class="back">Что делали?</div>
+            </div>
         </div>
     </div>
-    <div class="card" data-type="where">
-        <div class="inner">
-            <div class="front" id="front-where">
-                <div class="card-title">Где я?</div>
-                <div class="card-content" id="content-where"></div>
-                <div class="empty-card-indicator"></div>
-            </div>
-            <div class="back">Где я?</div>
-        </div>
-    </div>
-    <div class="card" data-type="meet">
-        <div class="inner">
-            <div class="front" id="front-meet">
-                <div class="card-title">Кого встретил?</div>
-                <div class="card-content" id="content-meet"></div>
-                <div class="empty-card-indicator"></div>
-            </div>
-            <div class="back">Кого встретил?</div>
-        </div>
-    </div>
-    <div class="card" data-type="action">
-        <div class="inner">
-            <div class="front" id="front-action">
-                <div class="card-title">Что делали?</div>
-                <div class="card-content" id="content-action"></div>
-                <div class="empty-card-indicator"></div>
-            </div>
-            <div class="back">Что делали?</div>
-        </div>
-    </div>
-</div>
 
-<div class="buttons">
-    <button id="resetBtn" disabled>Сбросить</button>
-    <button id="nextBtn" disabled>Следующий раунд</button>
+    <div class="buttons">
+        <button id="resetBtn" disabled>Сбросить</button>
+        <button id="nextBtn" disabled>Следующий раунд</button>
+    </div>
 </div>
 
 <script>
@@ -566,55 +624,50 @@ window.addEventListener('DOMContentLoaded', function() {
     });
 });
 
-/* Регистрация Service Worker для PWA */
-if ('serviceWorker' in navigator) {
-    window.addEventListener('load', function() {
-        try {
-            // Создаем простой service worker в виде строки
-            const swContent = `
-                self.addEventListener('install', function(event) {
-                    event.waitUntil(self.skipWaiting());
-                });
-                self.addEventListener('activate', function(event) {
-                    event.waitUntil(self.clients.claim());
-                });
-            `;
-            
-            // Создаем Blob из строки
-            const blob = new Blob([swContent], {type: 'application/javascript'});
-            const swUrl = URL.createObjectURL(blob);
-            
-            // Регистрируем service worker
-            navigator.serviceWorker.register(swUrl)
-                .then(function(registration) {
-                    console.log('Service Worker зарегистрирован');
-                })
-                .catch(function(error) {
-                    console.log('Ошибка регистрации Service Worker:', error);
-                });
-        } catch (e) {
-            console.log('Не удалось создать Service Worker:', e);
-        }
-    });
+/* iOS PWA фиксы */
+if (navigator.standalone) {
+    document.body.classList.add('standalone');
 }
 
-/* Обработка PWA установки */
-let deferredPrompt;
+// Фикс для 100vh на iOS
+function setVH() {
+    let vh = window.innerHeight * 0.01;
+    document.documentElement.style.setProperty('--vh', `${vh}px`);
+}
 
-window.addEventListener('beforeinstallprompt', (e) => {
-    // Предотвращаем автоматическое отображение подсказки
-    e.preventDefault();
-    // Сохраняем событие для использования позже
-    deferredPrompt = e;
-    
-    // Можно показать свою кнопку установки
-    console.log('PWA готово к установке');
+window.addEventListener('load', setVH);
+window.addEventListener('resize', setVH);
+window.addEventListener('orientationchange', setVH);
+
+// Скрываем адресную строку на iOS
+window.addEventListener('load', function() {
+    setTimeout(function() {
+        window.scrollTo(0, 1);
+    }, 0);
 });
 
-/* Улучшение для iOS PWA */
-if (window.navigator.standalone) {
-    // Приложение запущено в полноэкранном режиме
-    document.body.classList.add('standalone');
+// Регистрация Service Worker для PWA
+if ('serviceWorker' in navigator) {
+    window.addEventListener('load', function() {
+        const sw = `
+            self.addEventListener('install', event => {
+                event.waitUntil(self.skipWaiting());
+            });
+            self.addEventListener('activate', event => {
+                event.waitUntil(self.clients.claim());
+            });
+            self.addEventListener('fetch', event => {
+                event.respondWith(fetch(event.request));
+            });
+        `;
+        
+        const blob = new Blob([sw], {type: 'application/javascript'});
+        const swURL = URL.createObjectURL(blob);
+        
+        navigator.serviceWorker.register(swURL)
+            .then(() => console.log('Service Worker зарегистрирован'))
+            .catch(err => console.log('Service Worker ошибка:', err));
+    });
 }
 </script>
 </body>
