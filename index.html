@@ -4,6 +4,17 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 <title>Игра «Правда или Блеф: История по Карточкам»</title>
+
+<!-- PWA мета-теги -->
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="Правда или Блеф">
+<meta name="theme-color" content="#5366d9">
+<meta name="mobile-web-app-capable" content="yes">
+<link rel="manifest" href="data:application/json;base64,ewogICJuYW1lIjogItCa0YDQsNGB0L3QvtC5INC+0LHRgNCw0LHQvtGC0YfQuNC6IiwKICAic2hvcnRfbmFtZSI6ICLQn9GA0LDQstC00LAiLAogICJkZXNjcmlwdGlvbiI6ICLQp9C10YDQvdC+0LPQviDQv9C+0LvRjNC30L7QstCw0YLQtdC70Ywg0L/RgNC+0LTRg9C60YIiLAogICJzdGFydF91cmwiICIuLyIsCiAgImRpc3BsYXkiOiAic3RhbmRhbG9uZSIsCiAgImJhY2tncm91bmRfY29sb3IiOiAiIzUzNjZkOSIsCiAgInRoZW1lX2NvbG9yIjogIiM1MzY2ZDkiLAogICJpY29ucyI6IFsKICAgIHsKICAgICAgInNyYyI6ICJkYXRhOmltYWdlL3N2Zyt4bWw7YmFzZTY0LFBITjJaeUI0Yld4dWN6MGlhSFIwY0RvdkwzZDNkeTUzTXk1dmNtY3ZNakF3TUM5emRtY2lJSEJ5WlhObGNuWmxRWE53WldOMFVtRjBhVzg5SW5oTmFXNVpUV2x1SUcxbFpYUWlJSFpwWlhkQ2IzZzlJakFnTUNBek1UQWdNelV3SWo0OGNtVmpkQ0IzYVdSMGFEMGlNVEF3SlNJZ2FHVnBaMmgwUFNJek1EQWlJR1pwYkd3OUltNXZibVVpSUhacFpYZFRkSEpwYm1jOUltVnVaWFFpSUhacFpYZGpiMjF0YjI1cGVtOXVkR0ZzYVdWdWREMGlkSEpoYm5Oc1lYUmxLREV1TVM0eE1pSS8iLAogICAgICAic2l6ZXMiOiAiMTkyeDE5MiIsCiAgICAgICJ0eXBlIjogImltYWdlL3BuZyIsCiAgICAgICJwdXJwb3NlIjogImFueSBtYXNrYWJsZSIKICAgIH0KICBdCn0=">
+<link rel="apple-touch-icon" href="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAxOTIgMTkyIiBmaWxsPSIjZmZmZmZmIj48cGF0aCBkPSJNMTYwIDY0SDEyOHYzMmgzMmM4LjggMCAxNi03LjIgMTYtMTZzLTcuMi0xNi0xNi0xNnptMCA5NkgxMjh2MzJoMzJjOC44IDAgMTYtNy4yIDE2LTE2cy03LjItMTYtMTYtMTZ6TTk2IDE2MGgtMzJ2MzJoMzJjOC44IDAgMTYtNy4yIDE2LTE2cy03LjItMTYtMTYtMTZ6bTAtOTZoLTMydjMyaDMyYzguOCAwIDE2LTcuMiAxNi0xNnMtNy4yLTE2LTE2LTE2em0wLTY0Yy0yNi41IDAtNDggMjEuNS00OCA0OHMyMS41IDQ4IDQ4IDQ4IDQ4LTIxLjUgNDgtNDgtMjEuNS00OC00OC00OHpNNjQgMTYwSDMyYy04LjggMC0xNiA3LjItMTYgMTZzNy4yIDE2IDE2IDE2aDMydi0zMnpNNjQgOTZIMzJjLTguOCAwLTE2IDcuMi0xNiAxNnM3LjIgMTYgMTYgMTZoMzJ2LTMyek05NiAwYy04LjggMC0xNiA3LjItMTYgMTZ2MzJoMzJjMjYuNSAwIDQ4LTIxLjUgNDgtNDhTMTIyLjUgMCA5NiAwek0xMjggMzJoMzJjOC44IDAgMTYtNy4yIDE2LTE2cy03LjItMTYtMTYtMTZoLTMydjMyeiIvPjwvc3ZnPg==">
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAxOTIgMTkyIiBmaWxsPSIjNTM2NmQ5Ij48cGF0aCBkPSJNMTYwIDY0SDEyOHYzMmgzMmM4LjggMCAxNi03LjIgMTYtMTZzLTcuMi0xNi0xNi0xNnptMCA5NkgxMjh2MzJoMzJjOC44IDAgMTYtNy4yIDE2LTE2cy03LjItMTYtMTYtMTZ6TTk2IDE2MGgtMzJ2MzJoMzJjOC44IDAgMTYtNy4yIDE2LTE2cy03LjItMTYtMTYtMTZ6bTAtOTZoLTMydjMyaDMyYzguOCAwIDE2LTcuMiAxNi0xNnMtNy4yLTE2LTE2LTE2em0wLTY0Yy0yNi41IDAtNDggMjEuNS00OCA0OHMyMS41IDQ4IDQ4IDQ4IDQ4LTIxLjUgNDgtNDgtMjEuNS00OC00OC00OHpNNjQgMTYwSDMyYy04LjggMC0xNiA3LjItMTYgMTZzNy4yIDE2IDE2IDE2aDMydi0zMnpNNjQgOTZIMzJjLTguOCAwLTE2IDcuMi0xNiAxNnM3LjIgMTYgMTYgMTZoMzJ2LTMyek05NiAwYy04LjggMC0xNiA3LjItMTYgMTZ2MzJoMzJjMjYuNSAwIDQ4LTIxLjUgNDgtNDhTMTIyLjUgMCA5NiAwek0xMjggMzJoMzJjOC44IDAgMTYtNy4yIDE2LTE2cy03LjItMTYtMTYtMTZoLTMydjMyeiIvPjwvc3ZnPg==">
+
 <style>
 body {
     margin: 0;
@@ -16,6 +27,7 @@ body {
     gap: 5px;
     user-select: none;
     min-height: 100vh;
+    -webkit-tap-highlight-color: transparent;
 }
 h2 {
     margin: 0;
@@ -23,6 +35,7 @@ h2 {
     font-weight: 700;
     color: #344055;
     text-align: center;
+    font-size: 1.3rem;
 }
 
 /* Счетчик раундов - статичный */
@@ -123,7 +136,6 @@ h2 {
     font-size: 14px;
     font-weight: 600;
     letter-spacing: 1px;
-    /* border-radius: 16px 0 0 0px; */
     text-transform: uppercase;
     box-shadow: 2px 0 8px rgba(83, 102, 217, 0.2);
 }
@@ -159,18 +171,17 @@ button {
     flex: 1;
     transition: all 0.2s;
     font-weight: 600;
-}
-button:hover {
-    background: #3d52c7;
-    transform: translateY(-2px);
+    -webkit-appearance: none;
 }
 button:active { 
-    transform: translateY(0px); 
+    opacity: 0.8;
+    transform: scale(0.98);
 }
 button:disabled {
     background: #a0a9d8;
     cursor: not-allowed;
     transform: none;
+    opacity: 0.7;
 }
 
 /* Индикатор загрузки */
@@ -196,6 +207,26 @@ button:disabled {
 }
 .card.empty .empty-card-indicator {
     display: block;
+}
+
+/* Стили для PWA режима */
+@media all and (display-mode: standalone) {
+    body {
+        padding-top: env(safe-area-inset-top);
+        padding-bottom: env(safe-area-inset-bottom);
+    }
+}
+
+/* Улучшения для touch устройств */
+@media (hover: none) {
+    button:hover {
+        background: #5366d9;
+        transform: none;
+    }
+    
+    .card {
+        cursor: default;
+    }
 }
 </style>
 </head>
@@ -534,7 +565,57 @@ window.addEventListener('DOMContentLoaded', function() {
         generateRound();
     });
 });
+
+/* Регистрация Service Worker для PWA */
+if ('serviceWorker' in navigator) {
+    window.addEventListener('load', function() {
+        try {
+            // Создаем простой service worker в виде строки
+            const swContent = `
+                self.addEventListener('install', function(event) {
+                    event.waitUntil(self.skipWaiting());
+                });
+                self.addEventListener('activate', function(event) {
+                    event.waitUntil(self.clients.claim());
+                });
+            `;
+            
+            // Создаем Blob из строки
+            const blob = new Blob([swContent], {type: 'application/javascript'});
+            const swUrl = URL.createObjectURL(blob);
+            
+            // Регистрируем service worker
+            navigator.serviceWorker.register(swUrl)
+                .then(function(registration) {
+                    console.log('Service Worker зарегистрирован');
+                })
+                .catch(function(error) {
+                    console.log('Ошибка регистрации Service Worker:', error);
+                });
+        } catch (e) {
+            console.log('Не удалось создать Service Worker:', e);
+        }
+    });
+}
+
+/* Обработка PWA установки */
+let deferredPrompt;
+
+window.addEventListener('beforeinstallprompt', (e) => {
+    // Предотвращаем автоматическое отображение подсказки
+    e.preventDefault();
+    // Сохраняем событие для использования позже
+    deferredPrompt = e;
+    
+    // Можно показать свою кнопку установки
+    console.log('PWA готово к установке');
+});
+
+/* Улучшение для iOS PWA */
+if (window.navigator.standalone) {
+    // Приложение запущено в полноэкранном режиме
+    document.body.classList.add('standalone');
+}
 </script>
 </body>
-
 </html>
