@@ -33,46 +33,38 @@
 <style>
 body {
     margin: 0;
-    padding: 20px;
+    padding: 0;
     background: #e9ecf3;
     font-family: -apple-system, BlinkMacSystemFont, sans-serif;
     display: flex;
     flex-direction: column;
     align-items: center;
-    gap: 5px;
     user-select: none;
     min-height: 100vh;
     -webkit-tap-highlight-color: transparent;
-    padding-top: constant(safe-area-inset-top);
-    padding-top: env(safe-area-inset-top);
-    padding-bottom: constant(safe-area-inset-bottom);
-    padding-bottom: env(safe-area-inset-bottom);
 }
 
-/* Фулскрин для PWA iOS */
-@supports (-webkit-touch-callout: none) {
-    body {
-        padding: 0;
-        padding-top: env(safe-area-inset-top);
-        padding-bottom: env(safe-area-inset-bottom);
-        background: #e9ecf3;
-    }
-    
-    .container {
-        max-width: 100%;
-        padding: 20px;
-        padding-top: calc(20px + env(safe-area-inset-top));
-        padding-bottom: calc(20px + env(safe-area-inset-bottom));
-    }
-}
-
+/* Основной контейнер */
 .container {
     width: 100%;
-    max-width: 380px;
+    max-width: 400px;
+    padding: 15px;
+    box-sizing: border-box;
     display: flex;
     flex-direction: column;
     align-items: center;
-    gap: 5px;
+    gap: 12px;
+    min-height: 100vh;
+}
+
+/* Фикс для safe-area на iOS с "чёлкой" */
+@supports (padding: max(0px)) {
+    .container {
+        padding-left: max(15px, env(safe-area-inset-left));
+        padding-right: max(15px, env(safe-area-inset-right));
+        padding-top: max(15px, env(safe-area-inset-top));
+        padding-bottom: max(15px, env(safe-area-inset-bottom));
+    }
 }
 
 h2 {
@@ -82,6 +74,7 @@ h2 {
     color: #344055;
     text-align: center;
     font-size: 1.3rem;
+    line-height: 1.3;
 }
 
 /* Счетчик раундов - статичный */
@@ -93,7 +86,7 @@ h2 {
     font-weight: 600;
     font-size: 16px;
     box-shadow: 0 4px 12px rgba(0,0,0,0.1);
-    margin-bottom: 10px;
+    margin-bottom: 5px;
     width: fit-content;
 }
 
@@ -105,8 +98,9 @@ h2 {
     border: 2px dashed #5366d9;
     background: white;
     box-shadow: 0 4px 12px rgba(0,0,0,0.06);
-    margin-bottom: 12px;
+    margin-bottom: 8px;
     cursor: pointer;
+    box-sizing: border-box;
 }
 
 /* Карточки */
@@ -115,11 +109,12 @@ h2 {
     max-width: 380px;
     display: flex;
     flex-direction: column;
-    gap: 18px;
+    gap: 15px;
+    flex: 1;
 }
 .card {
     width: 100%;
-    height: 160px;
+    height: 150px;
     position: relative;
     perspective: 1500px;
     cursor: pointer;
@@ -129,7 +124,7 @@ h2 {
     height: 100%;
     position: absolute;
     transform-style: preserve-3d;
-    border-radius: 18px;
+    border-radius: 16px;
     transition: transform 0.7s cubic-bezier(.17,.67,.49,1.39);
     box-shadow: 0 6px 16px rgba(0,0,0,0.1);
 }
@@ -141,13 +136,13 @@ h2 {
     width: 100%;
     height: 100%;
     backface-visibility: hidden;
-    border-radius: 18px;
+    border-radius: 16px;
     display: flex;
     align-items: center;
-    padding: 20px;
+    padding: 15px;
     box-sizing: border-box;
     text-align: center;
-    font-size: 22px;
+    font-size: 20px;
     font-weight: 600;
     word-break: break-word;
     overflow: hidden;
@@ -171,7 +166,7 @@ h2 {
     left: 0;
     top: 0;
     bottom: 0;
-    width: 40px;
+    width: 38px;
     writing-mode: vertical-rl;
     transform: rotate(180deg);
     background: linear-gradient(180deg, #6d7df2, #5366d9);
@@ -179,7 +174,7 @@ h2 {
     display: flex;
     align-items: center;
     justify-content: center;
-    font-size: 14px;
+    font-size: 13px;
     font-weight: 600;
     letter-spacing: 1px;
     text-transform: uppercase;
@@ -188,12 +183,14 @@ h2 {
 
 .card-content {
     flex: 1;
-    padding-left: 50px;
-    padding-right: 20px;
+    padding-left: 48px;
+    padding-right: 15px;
     display: flex;
     align-items: center;
     justify-content: center;
     text-align: center;
+    word-break: break-word;
+    hyphens: auto;
 }
 
 /* Кнопки */
@@ -204,6 +201,7 @@ h2 {
     max-width: 380px;
     justify-content: center;
     margin-top: 10px;
+    padding-top: 10px;
 }
 button {
     background: #5366d9;
@@ -236,8 +234,9 @@ button:disabled {
     font-size: 14px;
     color: #666;
     text-align: center;
-    margin-top: -5px;
-    margin-bottom: 5px;
+    margin-bottom: 8px;
+    width: 100%;
+    max-width: 380px;
 }
 
 /* Индикатор пустой карточки */
@@ -245,8 +244,8 @@ button:disabled {
     position: absolute;
     top: 8px;
     right: 8px;
-    width: 20px;
-    height: 20px;
+    width: 18px;
+    height: 18px;
     background: #ff6b6b;
     border-radius: 50%;
     display: none;
@@ -256,9 +255,14 @@ button:disabled {
 }
 
 /* Стили для PWA режима */
-.standalone body {
-    padding-top: env(safe-area-inset-top);
-    padding-bottom: env(safe-area-inset-bottom);
+@media (display-mode: standalone) {
+    body {
+        background: #e9ecf3;
+    }
+    .container {
+        padding-top: max(15px, env(safe-area-inset-top));
+        padding-bottom: max(15px, env(safe-area-inset-bottom));
+    }
 }
 
 /* Улучшения для touch устройств */
@@ -278,10 +282,23 @@ input, select, textarea {
     font-size: 16px !important;
 }
 
-/* Скрываем стандартные элементы браузера в PWA */
-@media (display-mode: standalone) {
-    body {
-        overscroll-behavior: none;
+/* Улучшенная поддержка для iPhone X и новее */
+@supports (padding: max(0px)) {
+    .container {
+        padding-top: max(15px, min(30px, env(safe-area-inset-top)));
+    }
+}
+
+/* Адаптация для маленьких экранов */
+@media (max-height: 700px) {
+    .card {
+        height: 140px;
+    }
+    h2 {
+        font-size: 1.2rem;
+    }
+    .buttons {
+        margin-top: 5px;
     }
 }
 </style>
@@ -289,12 +306,13 @@ input, select, textarea {
 <body>
 
 <div class="container">
-    <h2>Тру стори, Bob!»</h2>
+    <h2>Игра «Правда или Блеф: История по Карточкам»</h2>
 
     <div class="status" id="status">Загрузите JSON-файл, чтобы начать игру</div>
     <input type="file" id="jsonLoader" accept=".json" title="Загрузите JSON-файл с данными для игры">
 
     <div class="round-counter" id="roundCounter">Раунд: 1</div>
+    
     <div class="cards">
         <div class="card" data-type="who">
             <div class="inner">
@@ -380,6 +398,7 @@ document.getElementById("jsonLoader").addEventListener("change", function() {
             document.getElementById("nextBtn").disabled = false;
             document.getElementById("status").textContent = `Загружено: ${file.name} (${minLength} записей в каждом поле)`;
             document.getElementById("status").style.color = "#2e7d32";
+            document.getElementById("status").style.display = "block";
             
             // Сброс раунда на первый
             roundNumber = 1;
@@ -388,6 +407,7 @@ document.getElementById("jsonLoader").addEventListener("change", function() {
         } catch (err) {
             document.getElementById("status").textContent = `Ошибка: ${err.message}`;
             document.getElementById("status").style.color = "#d32f2f";
+            document.getElementById("status").style.display = "block";
             console.error(err);
         }
     };
@@ -483,7 +503,9 @@ function updateStatusWithEmptyCards() {
         statusText += `Пустых карт: ${emptyCount}`;
     }
     
-    document.getElementById("status").textContent = statusText;
+    const statusElement = document.getElementById("status");
+    statusElement.textContent = statusText;
+    statusElement.style.display = "block";
 }
 
 /* История */
@@ -556,6 +578,7 @@ window.addEventListener('DOMContentLoaded', function() {
     // Добавляем подсказку
     const status = document.getElementById("status");
     status.innerHTML = "Загрузите JSON-файл или <a href='#' id='loadExample'>используйте пример</a>";
+    status.style.display = "block";
     
     document.getElementById("loadExample").addEventListener("click", function(e) {
         e.preventDefault();
@@ -616,6 +639,7 @@ window.addEventListener('DOMContentLoaded', function() {
         document.getElementById("nextBtn").disabled = false;
         document.getElementById("status").textContent = "Используется пример данных (10 записей в каждом поле)";
         document.getElementById("status").style.color = "#2e7d32";
+        document.getElementById("status").style.display = "block";
         
         // Сброс раунда на первый
         roundNumber = 1;
@@ -625,10 +649,6 @@ window.addEventListener('DOMContentLoaded', function() {
 });
 
 /* iOS PWA фиксы */
-if (navigator.standalone) {
-    document.body.classList.add('standalone');
-}
-
 // Фикс для 100vh на iOS
 function setVH() {
     let vh = window.innerHeight * 0.01;
@@ -639,34 +659,60 @@ window.addEventListener('load', setVH);
 window.addEventListener('resize', setVH);
 window.addEventListener('orientationchange', setVH);
 
-// Скрываем адресную строку на iOS
-window.addEventListener('load', function() {
-    setTimeout(function() {
-        window.scrollTo(0, 1);
-    }, 0);
-});
+// Определение iOS устройства
+function isIOS() {
+    return [
+        'iPad Simulator',
+        'iPhone Simulator',
+        'iPod Simulator',
+        'iPad',
+        'iPhone',
+        'iPod'
+    ].includes(navigator.platform) ||
+    (navigator.userAgent.includes("Mac") && "ontouchend" in document);
+}
 
-// Регистрация Service Worker для PWA
-if ('serviceWorker' in navigator) {
+// Применение стилей для iOS
+if (isIOS()) {
+    document.body.classList.add('ios-device');
+    
+    // Фикс для предотвращения зума при фокусе
+    document.addEventListener('touchstart', function(e) {
+        if (e.target.tagName === 'INPUT' || e.target.tagName === 'SELECT' || e.target.tagName === 'TEXTAREA') {
+            return;
+        }
+        const inputs = document.querySelectorAll('input, select, textarea');
+        inputs.forEach(input => {
+            if (input !== document.activeElement) {
+                input.blur();
+            }
+        });
+    }, { passive: true });
+}
+
+// Регистрация Service Worker для PWA (упрощенная)
+if ('serviceWorker' in navigator && location.protocol === 'https:') {
     window.addEventListener('load', function() {
-        const sw = `
+        // Простой service worker для PWA
+        const swContent = `
             self.addEventListener('install', event => {
                 event.waitUntil(self.skipWaiting());
             });
             self.addEventListener('activate', event => {
                 event.waitUntil(self.clients.claim());
             });
-            self.addEventListener('fetch', event => {
-                event.respondWith(fetch(event.request));
-            });
         `;
         
-        const blob = new Blob([sw], {type: 'application/javascript'});
-        const swURL = URL.createObjectURL(blob);
-        
-        navigator.serviceWorker.register(swURL)
-            .then(() => console.log('Service Worker зарегистрирован'))
-            .catch(err => console.log('Service Worker ошибка:', err));
+        try {
+            const blob = new Blob([swContent], {type: 'application/javascript'});
+            const swURL = URL.createObjectURL(blob);
+            
+            navigator.serviceWorker.register(swURL)
+                .then(() => console.log('Service Worker зарегистрирован для PWA'))
+                .catch(err => console.log('Service Worker ошибка:', err));
+        } catch (e) {
+            console.log('Не удалось создать Service Worker');
+        }
     });
 }
 </script>
