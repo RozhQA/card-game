@@ -44,26 +44,33 @@ body {
     -webkit-tap-highlight-color: transparent;
 }
 
-/* Основной контейнер */
+/* Основной контейнер - теперь отвечает за отступы от "чёлки" */
 .container {
     width: 100%;
     max-width: 400px;
-    padding: 15px;
+    padding: 20px;
     box-sizing: border-box;
     display: flex;
     flex-direction: column;
     align-items: center;
     gap: 12px;
     min-height: 100vh;
+    margin: 0 auto;
 }
 
-/* Фикс для safe-area на iOS с "чёлкой" */
-@supports (padding: max(0px)) {
+/* Ключевое исправление: добавляем padding-top только для PWA режима */
+@media (display-mode: standalone) {
     .container {
-        padding-left: max(15px, env(safe-area-inset-left));
-        padding-right: max(15px, env(safe-area-inset-right));
-        padding-top: max(15px, env(safe-area-inset-top));
-        padding-bottom: max(15px, env(safe-area-inset-bottom));
+        padding-top: calc(20px + env(safe-area-inset-top));
+        padding-bottom: calc(20px + env(safe-area-inset-bottom));
+    }
+}
+
+/* Для обычного режима браузера на iOS */
+@supports (padding: max(0px)) {
+    body:not(.pwa-mode) .container {
+        padding-top: max(20px, env(safe-area-inset-top));
+        padding-bottom: max(20px, env(safe-area-inset-bottom));
     }
 }
 
@@ -75,6 +82,7 @@ h2 {
     text-align: center;
     font-size: 1.3rem;
     line-height: 1.3;
+    padding-top: 5px;
 }
 
 /* Счетчик раундов - статичный */
@@ -111,6 +119,7 @@ h2 {
     flex-direction: column;
     gap: 15px;
     flex: 1;
+    margin-top: 5px;
 }
 .card {
     width: 100%;
@@ -254,17 +263,6 @@ button:disabled {
     display: block;
 }
 
-/* Стили для PWA режима */
-@media (display-mode: standalone) {
-    body {
-        background: #e9ecf3;
-    }
-    .container {
-        padding-top: max(15px, env(safe-area-inset-top));
-        padding-bottom: max(15px, env(safe-area-inset-bottom));
-    }
-}
-
 /* Улучшения для touch устройств */
 @media (hover: none) {
     button:hover {
@@ -282,13 +280,6 @@ input, select, textarea {
     font-size: 16px !important;
 }
 
-/* Улучшенная поддержка для iPhone X и новее */
-@supports (padding: max(0px)) {
-    .container {
-        padding-top: max(15px, min(30px, env(safe-area-inset-top)));
-    }
-}
-
 /* Адаптация для маленьких экранов */
 @media (max-height: 700px) {
     .card {
@@ -300,6 +291,18 @@ input, select, textarea {
     .buttons {
         margin-top: 5px;
     }
+}
+
+/* Дополнительные отступы для iPhone с "чёлкой" */
+@supports (padding: max(0px)) {
+    .ios-notch-padding {
+        padding-top: max(20px, env(safe-area-inset-top));
+    }
+}
+
+/* Фикс для flex-контейнера, чтобы контент не уходил под "чёлку" */
+body {
+    position: relative;
 }
 </style>
 </head>
@@ -648,7 +651,38 @@ window.addEventListener('DOMContentLoaded', function() {
     });
 });
 
-/* iOS PWA фиксы */
+/* Определяем PWA режим и применяем соответствующие стили */
+function checkPWA() {
+    // Проверяем, запущено ли приложение как PWA
+    const isStandalone = window.matchMedia('(display-mode: standalone)').matches || 
+                       window.navigator.standalone ||
+                       document.referrer.includes('android-app://');
+    
+    if (isStandalone) {
+        document.body.classList.add('pwa-mode');
+        console.log('Приложение запущено как PWA');
+        
+        // Принудительно добавляем отступы для "чёлки"
+        const container = document.querySelector('.container');
+        if (container) {
+            container.style.paddingTop = `calc(20px + env(safe-area-inset-top))`;
+            container.style.paddingBottom = `calc(20px + env(safe-area-inset-bottom))`;
+        }
+    } else {
+        document.body.classList.remove('pwa-mode');
+        console.log('Приложение запущено в браузере');
+    }
+}
+
+// Проверяем режим при загрузке и изменении размера окна
+window.addEventListener('load', checkPWA);
+window.addEventListener('resize', checkPWA);
+
+// Также проверяем при изменении ориентации
+window.addEventListener('orientationchange', function() {
+    setTimeout(checkPWA, 300);
+});
+
 // Фикс для 100vh на iOS
 function setVH() {
     let vh = window.innerHeight * 0.01;
