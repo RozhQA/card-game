@@ -1,0 +1,538 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+<title>Карточная игра</title>
+<style>
+body {
+    margin: 0;
+    padding: 20px;
+    background: #e9ecf3;
+    font-family: -apple-system, BlinkMacSystemFont, sans-serif;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 20px;
+    user-select: none;
+    min-height: 100vh;
+}
+h2 {
+    margin: 0;
+    margin-bottom: 5px;
+    font-weight: 700;
+    color: #344055;
+    text-align: center;
+}
+#jsonLoader {
+    width: 100%;
+    max-width: 380px;
+    padding: 12px;
+    border-radius: 12px;
+    border: 2px dashed #5366d9;
+    background: white;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.06);
+    margin-bottom: 12px;
+    cursor: pointer;
+}
+
+/* Карточки */
+.cards {
+    width: 100%;
+    max-width: 380px;
+    display: flex;
+    flex-direction: column;
+    gap: 18px;
+}
+.card {
+    width: 100%;
+    height: 160px;
+    position: relative;
+    perspective: 1500px;
+    cursor: pointer;
+}
+.inner {
+    width: 100%;
+    height: 100%;
+    position: absolute;
+    transform-style: preserve-3d;
+    border-radius: 18px;
+    transition: transform 0.7s cubic-bezier(.17,.67,.49,1.39);
+    box-shadow: 0 6px 16px rgba(0,0,0,0.1);
+}
+.card.flipped .inner {
+    transform: rotateY(180deg);
+}
+.front, .back {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    backface-visibility: hidden;
+    border-radius: 18px;
+    display: flex;
+    align-items: center;
+    padding: 20px;
+    box-sizing: border-box;
+    text-align: center;
+    font-size: 22px;
+    font-weight: 600;
+    word-break: break-word;
+    overflow: hidden;
+}
+.back {
+    background: linear-gradient(145deg, #5366d9, #6d7df2);
+    color: white;
+    letter-spacing: 0.5px;
+    justify-content: center;
+}
+.front {
+    background: white;
+    color: #344055;
+    transform: rotateY(180deg);
+    border: 2px solid #e0e5ff;
+}
+
+/* Вертикальный заголовок на лицевой стороне */
+.card-title {
+    position: absolute;
+    left: 0;
+    top: 0;
+    bottom: 0;
+    width: 40px;
+    writing-mode: vertical-rl;
+    transform: rotate(180deg);
+    background: linear-gradient(180deg, #6d7df2, #5366d9);
+    color: white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 16px;
+    font-weight: 600;
+    letter-spacing: 1px;
+    border-radius: 16px 0 0 16px;
+    text-transform: uppercase;
+    box-shadow: 2px 0 8px rgba(83, 102, 217, 0.2);
+}
+
+.card-content {
+    flex: 1;
+    padding-left: 50px;
+    padding-right: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+}
+
+/* Кнопки */
+.buttons {
+    display: flex;
+    gap: 12px;
+    width: 100%;
+    max-width: 380px;
+    justify-content: center;
+    margin-top: 10px;
+}
+button {
+    background: #5366d9;
+    color: white;
+    border: none;
+    border-radius: 12px;
+    padding: 14px 20px;
+    font-size: 16px;
+    cursor: pointer;
+    box-shadow: 0 4px 14px rgba(0,0,0,0.15);
+    flex: 1;
+    transition: all 0.2s;
+    font-weight: 600;
+}
+button:hover {
+    background: #3d52c7;
+    transform: translateY(-2px);
+}
+button:active { 
+    transform: translateY(0px); 
+}
+button:disabled {
+    background: #a0a9d8;
+    cursor: not-allowed;
+    transform: none;
+}
+
+/* Индикатор загрузки */
+.status {
+    font-size: 14px;
+    color: #666;
+    text-align: center;
+    margin-top: -10px;
+}
+
+/* Счетчик раундов */
+.round-counter {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    background: #5366d9;
+    color: white;
+    padding: 8px 16px;
+    border-radius: 20px;
+    font-weight: 600;
+    font-size: 14px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+    z-index: 100;
+}
+
+/* Индикатор пустой карточки */
+.empty-card-indicator {
+    position: absolute;
+    top: 8px;
+    right: 8px;
+    width: 20px;
+    height: 20px;
+    background: #ff6b6b;
+    border-radius: 50%;
+    display: none;
+}
+.card.empty .empty-card-indicator {
+    display: block;
+}
+</style>
+</head>
+<body>
+
+<h2>Карточная игра</h2>
+<input type="file" id="jsonLoader" accept=".json" title="Загрузите JSON-файл с данными для игры">
+<div class="status" id="status">Загрузите JSON-файл, чтобы начать игру</div>
+
+<div class="round-counter" id="roundCounter">Раунд: 1</div>
+
+<div class="cards">
+    <div class="card" data-type="who">
+        <div class="inner">
+            <div class="front" id="front-who">
+                <div class="card-title">Кто я?</div>
+                <div class="card-content" id="content-who"></div>
+                <div class="empty-card-indicator"></div>
+            </div>
+            <div class="back">Кто я?</div>
+        </div>
+    </div>
+    <div class="card" data-type="where">
+        <div class="inner">
+            <div class="front" id="front-where">
+                <div class="card-title">Где я?</div>
+                <div class="card-content" id="content-where"></div>
+                <div class="empty-card-indicator"></div>
+            </div>
+            <div class="back">Где я?</div>
+        </div>
+    </div>
+    <div class="card" data-type="meet">
+        <div class="inner">
+            <div class="front" id="front-meet">
+                <div class="card-title">Кого встретил?</div>
+                <div class="card-content" id="content-meet"></div>
+                <div class="empty-card-indicator"></div>
+            </div>
+            <div class="back">Кого встретил?</div>
+        </div>
+    </div>
+    <div class="card" data-type="action">
+        <div class="inner">
+            <div class="front" id="front-action">
+                <div class="card-title">Что делали?</div>
+                <div class="card-content" id="content-action"></div>
+                <div class="empty-card-indicator"></div>
+            </div>
+            <div class="back">Что делали?</div>
+        </div>
+    </div>
+</div>
+
+<div class="buttons">
+    <button id="resetBtn" disabled>Сбросить</button>
+    <button id="nextBtn" disabled>Следующий раунд</button>
+</div>
+
+<script>
+let data = null;
+let currentRound = [];
+let roundNumber = 1;
+let emptyCardsThisRound = [];
+
+/* Загрузка JSON */
+document.getElementById("jsonLoader").addEventListener("change", function() {
+    const file = this.files[0];
+    if (!file) return;
+    
+    const reader = new FileReader();
+    reader.onload = function(e) {
+        try {
+            data = JSON.parse(e.target.result);
+            // Проверяем структуру данных
+            if (!data.who || !data.where || !data.meet || !data.action) {
+                throw new Error("Неверная структура JSON");
+            }
+            
+            // Проверяем, что есть достаточно данных
+            const minLength = Math.min(
+                data.who.length, 
+                data.where.length, 
+                data.meet.length, 
+                data.action.length
+            );
+            
+            if (minLength < 10) {
+                throw new Error("В каждом поле должно быть не менее 10 записей");
+            }
+            
+            document.getElementById("resetBtn").disabled = false;
+            document.getElementById("nextBtn").disabled = false;
+            document.getElementById("status").textContent = `Загружено: ${file.name} (${minLength} записей в каждом поле)`;
+            document.getElementById("status").style.color = "#2e7d32";
+            
+            // Сброс раунда на первый
+            roundNumber = 1;
+            document.getElementById("roundCounter").textContent = `Раунд: ${roundNumber}`;
+            generateRound();
+        } catch (err) {
+            document.getElementById("status").textContent = `Ошибка: ${err.message}`;
+            document.getElementById("status").style.color = "#d32f2f";
+            console.error(err);
+        }
+    };
+    reader.readAsText(file);
+});
+
+/* Вспомогательная функция */
+function rand(arr) { 
+    if (!arr || arr.length === 0) return "Нет данных";
+    return arr[Math.floor(Math.random() * arr.length)]; 
+}
+
+/* Определяем, какие карты будут пустыми */
+function determineEmptyCards() {
+    const cards = ['where', 'meet', 'action']; // Карты 2-4
+    emptyCardsThisRound = [];
+    
+    // Первая карта (who) никогда не бывает пустой
+    
+    if (roundNumber <= 3) {
+        // В первых 3 раундах только одна пустая карта из 2-4
+        const randomIndex = Math.floor(Math.random() * cards.length);
+        emptyCardsThisRound.push(cards[randomIndex]);
+    } else {
+        // Начиная с 4 раунда - случайное количество пустых карт (0-3)
+        cards.forEach(cardType => {
+            if (Math.random() > 0.5) { // 50% шанс на пустую карту
+                emptyCardsThisRound.push(cardType);
+            }
+        });
+    }
+}
+
+/* Генерация раунда */
+function generateRound() {
+    if (!data) return;
+    
+    // Определяем пустые карты для этого раунда
+    determineEmptyCards();
+    
+    // Сбрасываем все карты
+    const cards = document.querySelectorAll(".card");
+    cards.forEach(c => {
+        c.classList.remove("flipped");
+        c.classList.remove("empty");
+    });
+    
+    // Первая карта (who) всегда с текстом
+    const whoText = rand(data.who);
+    document.getElementById("content-who").textContent = whoText;
+    
+    // Карты 2-4
+    const cardTypes = ['where', 'meet', 'action'];
+    const results = [whoText];
+    
+    cardTypes.forEach(cardType => {
+        const contentElement = document.getElementById(`content-${cardType}`);
+        const cardElement = document.querySelector(`[data-type="${cardType}"]`);
+        
+        if (emptyCardsThisRound.includes(cardType)) {
+            // Пустая карта
+            contentElement.textContent = "...";
+            cardElement.classList.add("empty");
+            results.push(""); // Пустая строка для истории
+        } else {
+            // Карта с текстом
+            const text = rand(data[cardType]);
+            contentElement.textContent = text;
+            results.push(text);
+        }
+    });
+    
+    // Сохраняем текущий раунд
+    currentRound = results;
+    
+    // Открываем первую карту автоматически
+    setTimeout(() => {
+        cards[0].classList.add("flipped");
+    }, 100);
+    
+    // Обновляем счетчик пустых карт в статусе
+    updateStatusWithEmptyCards();
+}
+
+/* Обновление статуса с информацией о пустых картах */
+function updateStatusWithEmptyCards() {
+    const emptyCount = emptyCardsThisRound.length;
+    let statusText = `Раунд ${roundNumber}. `;
+    
+    if (emptyCount === 0) {
+        statusText += "Все карты заполнены";
+    } else {
+        statusText += `Пустых карт: ${emptyCount}`;
+    }
+    
+    document.getElementById("status").textContent = statusText;
+}
+
+/* История */
+function saveHistory() {
+    if (currentRound.length === 0) return;
+    
+    const history = JSON.parse(localStorage.getItem("history") || "[]");
+    history.push({
+        round: roundNumber,
+        who: currentRound[0],
+        where: currentRound[1],
+        meet: currentRound[2],
+        action: currentRound[3],
+        emptyCards: emptyCardsThisRound,
+        time: new Date().toISOString()
+    });
+    localStorage.setItem("history", JSON.stringify(history));
+}
+
+/* Слушатели для карт */
+document.querySelectorAll(".card").forEach(card => {
+    card.addEventListener("click", function() {
+        this.classList.toggle("flipped");
+    });
+});
+
+/* Кнопки */
+document.getElementById("resetBtn").addEventListener("click", function() {
+    if (!data) return;
+    roundNumber = 1;
+    document.getElementById("roundCounter").textContent = `Раунд: ${roundNumber}`;
+    generateRound();
+});
+
+document.getElementById("nextBtn").addEventListener("click", function() {
+    if (!data) return;
+    saveHistory();
+    roundNumber++;
+    document.getElementById("roundCounter").textContent = `Раунд: ${roundNumber}`;
+    generateRound();
+});
+
+/* Drag & Drop для файла */
+const jsonLoader = document.getElementById('jsonLoader');
+const dropZone = document.body;
+
+dropZone.addEventListener('dragover', function(e) {
+    e.preventDefault();
+    dropZone.style.backgroundColor = '#f0f2ff';
+});
+
+dropZone.addEventListener('dragleave', function(e) {
+    if (e.relatedTarget === null || !dropZone.contains(e.relatedTarget)) {
+        dropZone.style.backgroundColor = '';
+    }
+});
+
+dropZone.addEventListener('drop', function(e) {
+    e.preventDefault();
+    dropZone.style.backgroundColor = '';
+    if (e.dataTransfer.files.length) {
+        jsonLoader.files = e.dataTransfer.files;
+        const event = new Event('change', { bubbles: true });
+        jsonLoader.dispatchEvent(event);
+    }
+});
+
+/* Инициализация с примером данных */
+window.addEventListener('DOMContentLoaded', function() {
+    // Добавляем подсказку
+    const status = document.getElementById("status");
+    status.innerHTML = "Загрузите JSON-файл или <a href='#' id='loadExample'>используйте пример</a>";
+    
+    document.getElementById("loadExample").addEventListener("click", function(e) {
+        e.preventDefault();
+        
+        // Пример данных
+        data = {
+            "who": [
+                "Пьяный дворник",
+                "Мужик в тапках",
+                "Серьёзный кот",
+                "Бабушка с авоськой",
+                "Офисный планктон",
+                "Дед Инсайд",
+                "Гопник философ",
+                "Курьер от бога",
+                "Тони Старк в тапочках",
+                "Соседка с маникюром"
+            ],
+            "where": [
+                "в пятиэтажке",
+                "на кухне у бабушки",
+                "в душной маршрутке",
+                "в офисе открытого пространства",
+                "в лифте с зеркалами",
+                "в Икее без карты",
+                "на крыше хрущёвки",
+                "в прошлогоднем снегу",
+                "в луже смысла",
+                "в телевизоре с тремя кнопками"
+            ],
+            "meet": [
+                "своего двойника",
+                "дракона из Икеи",
+                "говорящего таракана",
+                "ангела с чеком",
+                "босса в пижаме",
+                "Халка на диете",
+                "Джокера в поликлинике",
+                "домового со смартфоном",
+                "призрака микроволновки",
+                "Йоду в лифте"
+            ],
+            "action": [
+                "чинили тапок космос",
+                "ели торт втихаря",
+                "спорили с микроволновкой",
+                "учили рыбу летать",
+                "искали пятый угол",
+                "мыли луну",
+                "колдовали над супом",
+                "разводили костер",
+                "объясняли коту квантовую физику",
+                "делили на ноль"
+            ]
+        };
+        
+        document.getElementById("resetBtn").disabled = false;
+        document.getElementById("nextBtn").disabled = false;
+        document.getElementById("status").textContent = "Используется пример данных (10 записей в каждом поле)";
+        document.getElementById("status").style.color = "#2e7d32";
+        
+        // Сброс раунда на первый
+        roundNumber = 1;
+        document.getElementById("roundCounter").textContent = `Раунд: ${roundNumber}`;
+        generateRound();
+    });
+});
+</script>
+</body>
+</html>
